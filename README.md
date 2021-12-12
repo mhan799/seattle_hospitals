@@ -1,21 +1,27 @@
-# seattle_hospitals
-#Project title
-Seattle Area Hospitals Locator
-#Project description
+# Seattle Area Hospitals Locator
 
-#Project goal (such as, what is the message you want to deliver through your project?)
-This project is aiming to providea brief but informational guide of hospital distributions for the residents of Seattle area.
+## Description
 
-#The application URL (not the repository url)
+## Goals
+This project is aiming to provide a brief but informational guide of hospital distributions for the residents of Seattle area.
 
-#Screenshots
 
-#Main functions
+## The Application URL
+[Seattle Area Hospitals Locator](https://mhan799.github.io/seattle_hospitals/index.html)
 
-#Data sources
+## Visuals
+
+
+## Main Functions
+
+## Data Sources
 Seattle Geo Data
-#Applied libraries (e.g., mapbox gl js) and Web Services (e.g., github, basemap) in use
-mapbox gl js 
-github
-#Other things that are necessary to inform the audience.
-#Acknowledgment
+
+## Applied Libraries (e.g., mapbox gl js) and Web Services (e.g., github, basemap) in use
+- mapbox gl js 
+- github
+
+## Other things that are necessary to inform the audience.
+
+## Acknowledgment
+The author for this project is Munan Han from GEOG495 using the materials taught by professor Bo Zhao, with the help from TA Xiaoqi Bao. Thank
