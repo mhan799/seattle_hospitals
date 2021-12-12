@@ -1,362 +1,354 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <title>Seattle Area Hospitals Locator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
-    <link
-      href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css"
-      rel="stylesheet"
-    />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css" rel="stylesheet" />
     <style>
-      body {
-        color: #404040;
-        font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', sans-serif;
-        margin: 0;
-        padding: 0;
-        -webkit-font-smoothing: antialiased;
-      }
+        body {
+            color: #404040;
+            font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
 
-      * {
-        box-sizing: border-box;
-      }
+        * {
+            box-sizing: border-box;
+        }
 
-      .sidebar {
-        position: absolute;
-        width: 33.3333%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        overflow: hidden;
-        border-right: 1px solid rgba(0, 0, 0, 0.25);
-      }
+        .sidebar {
+            position: absolute;
+            width: 33.3333%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            border-right: 1px solid rgba(0, 0, 0, 0.25);
+        }
 
-      .map {
-        position: absolute;
-        left: 33.3333%;
-        width: 66.6666%;
-        top: 0;
-        bottom: 0;
-      }
+        .map {
+            position: absolute;
+            left: 33.3333%;
+            width: 66.6666%;
+            top: 0;
+            bottom: 0;
+        }
 
-      h1 {
-        font-size: 22px;
-        margin: 0;
-        font-weight: 400;
-        line-height: 20px;
-        padding: 20px 2px;
-      }
+        h1 {
+            font-size: 22px;
+            margin: 0;
+            font-weight: 400;
+            line-height: 20px;
+            padding: 20px 2px;
+        }
 
-      a {
-        color: #404040;
-        text-decoration: none;
-      }
+        a {
+            color: #404040;
+            text-decoration: none;
+        }
 
-      a:hover {
-        color: #101010;
-      }
+        a:hover {
+            color: #101010;
+        }
 
-      .heading {
-        background: #fff;
-        border-bottom: 1px solid #eee;
-        min-height: 60px;
-        line-height: 60px;
-        padding: 0 10px;
-        background-color: #00853e;
-        color: #fff;
-      }
+        .heading {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            min-height: 60px;
+            line-height: 60px;
+            padding: 0 10px;
+            background-color: #00853e;
+            color: #fff;
+        }
 
-      .listings {
-        height: 100%;
-        overflow: auto;
-        padding-bottom: 60px;
-      }
+        .listings {
+            height: 100%;
+            overflow: auto;
+            padding-bottom: 60px;
+        }
 
-      .listings .item {
-        display: block;
-        border-bottom: 1px solid #eee;
-        padding: 10px;
-        text-decoration: none;
-      }
+        .listings .item {
+            display: block;
+            border-bottom: 1px solid #eee;
+            padding: 10px;
+            text-decoration: none;
+        }
 
-      .listings .item:last-child {
-        border-bottom: none;
-      }
-      .listings .item .title {
-        display: block;
-        color: #00853e;
-        font-weight: 700;
-      }
+        .listings .item:last-child {
+            border-bottom: none;
+        }
 
-      .listings .item .title small {
-        font-weight: 400;
-      }
-      .listings .item.active .title,
-      .listings .item .title:hover {
-        color: #8cc63f;
-      }
-      .listings .item.active {
-        background-color: #f8f8f8;
-      }
-      ::-webkit-scrollbar {
-        width: 3px;
-        height: 3px;
-        border-left: 0;
-        background: rgba(0, 0, 0, 0.1);
-      }
-      ::-webkit-scrollbar-track {
-        background: none;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #00853e;
-        border-radius: 0;
-      }
+        .listings .item .title {
+            display: block;
+            color: #00853e;
+            font-weight: 700;
+        }
 
-      .marker {
-        border: none;
-        cursor: pointer;
-        height: 48px;
-        width: 48px;
-        background-image: url(marker.png);
-      }
+        .listings .item .title small {
+            font-weight: 400;
+        }
 
-      /* Marker tweaks */
-      .mapboxgl-popup {
-        padding-bottom: 50px;
-      }
+        .listings .item.active .title,
+        .listings .item .title:hover {
+            color: #8cc63f;
+        }
 
-      .mapboxgl-popup-close-button {
-        display: none;
-      }
-      .mapboxgl-popup-content {
-        font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', sans-serif;
-        padding: 0;
-        width: 180px;
-      }
-      .mapboxgl-popup-content h3 {
-        background: #91c949;
-        color: #fff;
-        margin: 0;
-        padding: 10px;
-        border-radius: 3px 3px 0 0;
-        font-weight: 700;
-        margin-top: -15px;
-      }
+        .listings .item.active {
+            background-color: #f8f8f8;
+        }
 
-      .mapboxgl-popup-content h4 {
-        margin: 0;
-        padding: 10px;
-        font-weight: 400;
-      }
+        ::-webkit-scrollbar {
+            width: 3px;
+            height: 3px;
+            border-left: 0;
+            background: rgba(0, 0, 0, 0.1);
+        }
 
-      .mapboxgl-popup-content div {
-        padding: 10px;
-      }
+        ::-webkit-scrollbar-track {
+            background: none;
+        }
 
-      .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
-        margin-top: 15px;
-      }
+        ::-webkit-scrollbar-thumb {
+            background: #00853e;
+            border-radius: 0;
+        }
 
-      .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
-        border-bottom-color: #91c949;
-      }
+        .marker {
+            border: none;
+            cursor: pointer;
+            height: 48px;
+            width: 48px;
+            background-image: url(img/marker.png);
+            /* display: inline-block; */
+            /* margin: 0 0.5rem; */
+        }
+
+        /* Marker tweaks */
+        .mapboxgl-popup {
+            padding-bottom: 50px;
+        }
+
+        .mapboxgl-popup-close-button {
+            display: none;
+        }
+
+        .mapboxgl-popup-content {
+            font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', sans-serif;
+            padding: 0;
+            width: 180px;
+        }
+
+        .mapboxgl-popup-content h3 {
+            background: #91c949;
+            color: #fff;
+            margin: 0;
+            padding: 10px;
+            border-radius: 3px 3px 0 0;
+            font-weight: 700;
+            margin-top: -15px;
+        }
+
+        .mapboxgl-popup-content h4 {
+            margin: 0;
+            padding: 10px;
+            font-weight: 400;
+        }
+
+        .mapboxgl-popup-content div {
+            padding: 10px;
+        }
+
+        .mapboxgl-popup-anchor-top>.mapboxgl-popup-content {
+            margin-top: 15px;
+        }
+
+        .mapboxgl-popup-anchor-top>.mapboxgl-popup-tip {
+            border-bottom-color: #91c949;
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="sidebar">
-      <div class="heading">
-        <h1>Facility locations</h1>
-      </div>
-      <div id="listings" class="listings"></div>
+        <div class="heading">
+            <h1>Facility Information</h1>
+        </div>
+        <div id="listings" class="listings"></div>
     </div>
     <div id="map" class="map"></div>
     <script>
-      mapboxgl.accessToken = 'pk.eyJ1IjoibWhhbjc5OSIsImEiOiJja3d6bjByNjcwd3F5MnBteG5yZnd6M3JlIn0.EUT1c2-bqnCSuiidnffSrw';
-
-      /**
-       * Add the map to the page
-       */
-      const map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/light-v10',
-        center: [-122.302, 47.68],
-        zoom: 8,
-      });
-
-      const stores = {
-        'type': 'FeatureCollection',
-        "features": [
-{ "type": "Feature", "properties": { "id": 1, "facility": "UW Medical Center - Northwest", "address": "1550 N 115th ST", "SE_ANNO_CAD_DATA": null, "city": "Seattle, WA, 98133-8401", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.uwmedicine.org/locations/northwest-hospital", "phone": "877-694-4677" }, "geometry": { "type": "Point", "coordinates": [ -122.336888076465812, 47.714248258374525 ] } },
-{ "type": "Feature", "properties": { "id": 2, "facility": "Swedish Medical Center - Ballard Campus", "address": "5300 Tallman Ave NW", "SE_ANNO_CAD_DATA": null, "city": "Seattle, WA 98107", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.swedish.org/locations/ballard-campus", "phone": "206-782-2700" }, "geometry": { "type": "Point", "coordinates": [ -122.379555320759337, 47.667365010590466 ] } },
-{ "type": "Feature", "properties": { "id": 3, "facility": "Highline Medical Center", "address": "16251 Sylvester Rd SW", "SE_ANNO_CAD_DATA": null, "city": "Burien, WA, 98166-3017", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.chifranciscan.org/highline-medical-center.html", "phone": "206-244-9970" }, "geometry": { "type": "Point", "coordinates": [ -122.341418602386113, 47.457799759385999 ] } },
-{ "type": "Feature", "properties": { "id": 4, "facility": "Valley Medical Center", "address": "400 S 43rd St", "SE_ANNO_CAD_DATA": null, "city": "Renton, WA, 98055-5714", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.uwmedicine.org/locations/valley-medical-center#main-tab", "phone": "425-690-1000" }, "geometry": { "type": "Point", "coordinates": [ -122.214120881170544, 47.442273259246448 ] } },
-{ "type": "Feature", "properties": { "id": 5, "facility": "St. Francis Hospital", "address": "34515 9th Ave S", "SE_ANNO_CAD_DATA": null, "city": "Federal Way, WA, 98003-6761", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.chifranciscan.org/st-francis-hospital.html", "phone": "253-835-8100" }, "geometry": { "type": "Point", "coordinates": [ -122.327278755847601, 47.292612055039413 ] } },
-{ "type": "Feature", "properties": { "id": 6, "facility": "Snoqualmie Valley Hospital", "address": "9801 Frontier Ave SE", "SE_ANNO_CAD_DATA": null, "city": "Snoqualmie, WA, 98065-5200", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "http://snoqualmiehospital.org/services/hospital-patients-and-families/", "phone": "425-831-2300" }, "geometry": { "type": "Point", "coordinates": [ -121.885359764122711, 47.512386573924658 ] } },
-{ "type": "Feature", "properties": { "id": 7, "facility": "Swedish Medical Center - First Hill", "address": "747 Broadway", "SE_ANNO_CAD_DATA": null, "city": "Seattle, WA, 98122-4379", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.swedish.org/locations/first-hill-campus", "phone": "206-386-6000" }, "geometry": { "type": "Point", "coordinates": [ -122.321927610488899, 47.608842030960048 ] } },
-{ "type": "Feature", "properties": { "id": 8, "facility": "MultiCare  Auburn Medical Center", "address": "202 N Division St", "SE_ANNO_CAD_DATA": null, "city": "Auburn, WA, 98001-4939", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.multicare.org/auburn-medical-center/", "phone": "253-833-7711" }, "geometry": { "type": "Point", "coordinates": [ -122.228885591977402, 47.309290882294526 ] } },
-{ "type": "Feature", "properties": { "id": 9, "facility": "Overlake Hospital Medical Center", "address": "1035 116th Ave NE", "SE_ANNO_CAD_DATA": null, "city": "Bellevue, WA, 98004-4604", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.overlakehospital.org/", "phone": "425-688-5000" }, "geometry": { "type": "Point", "coordinates": [ -122.187688383438186, 47.62149342393807 ] } },
-{ "type": "Feature", "properties": { "id": 10, "facility": "Seattle Children's Hospital", "address": "4800 Sand Point Way NE", "SE_ANNO_CAD_DATA": null, "city": "Seattle, WA, 98105-3901", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.seattlechildrens.org/", "phone": "206-987-2000" }, "geometry": { "type": "Point", "coordinates": [ -122.281457895762173, 47.662313022406302 ] } },
-{ "type": "Feature", "properties": { "id": 12, "facility": "Virginia Mason Medical Center", "address": "1100 9th St", "SE_ANNO_CAD_DATA": null, "city": "Seattle, WA, 98101-2742", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-18T00:00:00Z", "URL": "https://www.virginiamason.org/seattle", "phone": "206-223-6600" }, "geometry": { "type": "Point", "coordinates": [ -122.327930082287978, 47.609530308915879 ] } },
-{ "type": "Feature", "properties": { "id": 13, "facility": "EvergreenHealth - Kirkland", "address": "12040 NE 128th St", "SE_ANNO_CAD_DATA": null, "city": "Kirkland, WA, 98034-3013", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.evergreenhealth.com/", "phone": "425-899-2621" }, "geometry": { "type": "Point", "coordinates": [ -122.178706906289818, 47.715810980033567 ] } },
-{ "type": "Feature", "properties": { "id": 14, "facility": "Swedish Medical Center - Cherry Hill", "address": "500 17th Ave", "SE_ANNO_CAD_DATA": null, "city": "Seattle, WA, 98122-5711", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.swedish.org/locations/cherry-hill-campus", "phone": "206-320-2000" }, "geometry": { "type": "Point", "coordinates": [ -122.309656422647535, 47.607054779202862 ] } },
-{ "type": "Feature", "properties": { "id": 15, "facility": "Seattle VA Medical Center", "address": "1660 S Columbian Way", "SE_ANNO_CAD_DATA": null, "city": "Seattle, WA 98108", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.pugetsound.va.gov/locations/directions.asp", "phone": "800-329-8387 Ext.71234" }, "geometry": { "type": "Point", "coordinates": [ -122.309169153005001, 47.562453874063173 ] } },
-{ "type": "Feature", "properties": { "id": 16, "facility": "Swedish Medical Center - Issaquah Campus", "address": "751 NE Blakely Dr", "SE_ANNO_CAD_DATA": null, "city": "Issaquah, WA, 98029-6201", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.swedish.org/locations/issaquah-campus", "phone": "425-313-4000" }, "geometry": { "type": "Point", "coordinates": [ -122.021929846430595, 47.536105830228884 ] } },
-{ "type": "Feature", "properties": { "id": 17, "facility": "Kaiser Permanente Capitol Hill Campus", "address": "201 16th Ave E ", "SE_ANNO_CAD_DATA": null, "city": "Seattle, WA, 98112-5226", "ACUTE_CARE": "N", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://wa.kaiserpermanente.org/html/public/locations/capitol-hill", "phone": "1-800-562-6300" }, "geometry": { "type": "Point", "coordinates": [ -122.312275500013811, 47.620135753647716 ] } },
-{ "type": "Feature", "properties": { "id": 18, "facility": "St. Elizabeth Hospital", "address": "1455 Battersby Ave", "SE_ANNO_CAD_DATA": null, "city": "Enumclaw, WA, 98022-3634", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.chifranciscan.org/st-elizabeth-hospital.html", "phone": "360-802-8800" }, "geometry": { "type": "Point", "coordinates": [ -121.987759744094475, 47.209180063142668 ] } },
-{ "type": "Feature", "properties": { "id": 19, "facility": "Harborview Medical Center", "address": "325 9th Ave", "SE_ANNO_CAD_DATA": null, "city": "Seattle, WA, 98104-2420", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.uwmedicine.org/locations/harborview-medical-center", "phone": "206-744-3000" }, "geometry": { "type": "Point", "coordinates": [ -122.323768943740106, 47.603993044413379 ] } },
-{ "type": "Feature", "properties": { "id": 20, "facility": "University of Washington Medical Center", "address": "1959 NE Pacific St", "SE_ANNO_CAD_DATA": null, "city": "Seattle, WA, 98195-0001", "ACUTE_CARE": "Y", "GIS_EDT_DT": "2020-03-17T00:00:00Z", "URL": "https://www.uwmedicine.org/locations/uw-medical-center", "phone": "206-598-3300" }, "geometry": { "type": "Point", "coordinates": [ -122.309072347669812, 47.650344116857902 ] } }
-]
-      };
-
-      /**
-       * Assign a unique id to each store. You'll use this `id`
-       * later to associate each point on the map with a listing
-       * in the sidebar.
-       */
-      stores.features.forEach((store, i) => {
-        store.properties.id = i;
-      });
-
-      /**
-       * Wait until the map loads to make changes to the map.
-       */
-      map.on('load', () => {
-        /**
-         * This is where your '.addLayer()' used to be, instead
-         * add only the source without styling a layer
-         */
-        map.addSource('places', {
-          'type': 'geojson',
-          'data': stores
-        });
+        mapboxgl.accessToken =
+            'pk.eyJ1IjoibWhhbjc5OSIsImEiOiJja3d6bjByNjcwd3F5MnBteG5yZnd6M3JlIn0.EUT1c2-bqnCSuiidnffSrw';
 
         /**
-         * Add all the things to the page:
-         * - The location listings on the side of the page
-         * - The markers onto the map
+         * Add the map to the page
          */
-        buildLocationList(stores);
-        addMarkers();
-      });
-
-      /**
-       * Add a marker to the map for every store listing.
-       **/
-      function addMarkers() {
-        /* For each feature in the GeoJSON object above: */
-        for (const marker of stores.features) {
-          /* Create a div element for the marker. */
-          const el = document.createElement('div');
-          /* Assign a unique `id` to the marker. */
-          el.id = `marker-${marker.properties.id}`;
-          /* Assign the `marker` class to each marker for styling. */
-          el.className = 'marker';
-
-          /**
-           * Create a marker using the div element
-           * defined above and add it to the map.
-           **/
-          new mapboxgl.Marker(el, { offset: [0, -23] })
-            .setLngLat(marker.geometry.coordinates)
-            .addTo(map);
-
-          /**
-           * Listen to the element and when it is clicked, do three things:
-           * 1. Fly to the point
-           * 2. Close all other popups and display popup for clicked store
-           * 3. Highlight listing in sidebar (and remove highlight for all other listings)
-           **/
-          el.addEventListener('click', (e) => {
-            /* Fly to the point */
-            flyToStore(marker);
-            /* Close all other popups and display popup for clicked store */
-            createPopUp(marker);
-            /* Highlight listing in sidebar */
-            const activeItem = document.getElementsByClassName('active');
-            e.stopPropagation();
-            if (activeItem[0]) {
-              activeItem[0].classList.remove('active');
-            }
-            const listing = document.getElementById(
-              `listing-${marker.properties.id}`
-            );
-            listing.classList.add('active');
-          });
-        }
-      }
-
-      /**
-       * Add a listing for each store to the sidebar.
-       **/
-      function buildLocationList(stores) {
-        for (const store of stores.features) {
-          /* Add a new listing section to the sidebar. */
-          const listings = document.getElementById('listings');
-          const listing = listings.appendChild(document.createElement('div'));
-          /* Assign a unique `id` to the listing. */
-          listing.id = `listing-${store.properties.id}`;
-          /* Assign the `item` class to each listing for styling. */
-          listing.className = 'item';
-
-          /* Add the link to the individual listing created above. */
-          const link = listing.appendChild(document.createElement('a'));
-          link.href = '#';
-          link.className = 'title';
-          link.id = `link-${store.properties.id}`;
-          link.innerHTML = `${store.properties.facility}`;
-
-          /* Add details to the individual listing. */
-          const details = listing.appendChild(document.createElement('div'));
-          details.innerHTML = `${store.properties.address}` + ` &middot; ${store.properties.city}` + ` &middot; ${store.properties.phone}`;
-
-          /**
-           * Listen to the element and when it is clicked, do four things:
-           * 1. Update the `currentFeature` to the store associated with the clicked link
-           * 2. Fly to the point
-           * 3. Close all other popups and display popup for clicked store
-           * 4. Highlight listing in sidebar (and remove highlight for all other listings)
-           **/
-          link.addEventListener('click', function () {
-            for (const feature of stores.features) {
-              if (this.id === `link-${feature.properties.id}`) {
-                flyToStore(feature);
-                createPopUp(feature);
-              }
-            }
-            const activeItem = document.getElementsByClassName('active');
-            if (activeItem[0]) {
-              activeItem[0].classList.remove('active');
-            }
-            this.parentNode.classList.add('active');
-          });
-        }
-      }
-
-      /**
-       * Use Mapbox GL JS's `flyTo` to move the camera smoothly
-       * a given center point.
-       **/
-      function flyToStore(currentFeature) {
-        map.flyTo({
-          center: currentFeature.geometry.coordinates,
-          zoom: 15
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mhan799/ckx2i0r7k46ys14jmzbgt80bn',
+            center: [-122.25, 47.55],
+            zoom: 8.5,
         });
-      }
 
-      /**
-       * Create a Mapbox GL JS `Popup`.
-       **/
-      function createPopUp(currentFeature) {
-        const popUps = document.getElementsByClassName('mapboxgl-popup');
-        if (popUps[0]) popUps[0].remove();
-        const popup = new mapboxgl.Popup({ closeOnClick: false })
-          .setLngLat(currentFeature.geometry.coordinates)
-          .setHTML(
-            `<h3>${currentFeature.properties.facility}</h3><h4>${currentFeature.properties.address}</h4><h4>${currentFeature.properties.phone}</h4>`
-          )
-          .addTo(map);
-      }
+        async function geojsonFetch() {
+
+            let response, stores;
+            response = await fetch('assets/hospitals.geojson');
+            stores = await response.json()
+        
+            /**
+             * Wait until the map loads to make changes to the map.
+             */
+            map.on('load', () => {
+                /**
+                 * This is where your '.addLayer()' used to be, instead
+                 * add only the source without styling a layer
+                 */
+                map.addSource('places', {
+                    'type': 'geojson',
+                    'data': stores
+                });
+
+                /**
+                 * Add all the things to the page:
+                 * - The location listings on the side of the page
+                 * - The markers onto the map
+                 */
+                buildLocationList(stores);
+                addMarkers();
+            });
+
+
+
+
+            /**
+             * Add a marker to the map for every store listing.
+             **/
+            function addMarkers() {
+                /* For each feature in the GeoJSON object above: */
+                for (const marker of stores.features) {
+                    /* Create a div element for the marker. */
+                    const el = document.createElement('div');
+                    /* Assign a unique `id` to the marker. */
+                    el.id = `marker-${marker.properties.id}`;
+                    /* Assign the `marker` class to each marker for styling. */
+                    el.className = 'marker';
+
+                    /**
+                     * Create a marker using the div element
+                     * defined above and add it to the map.
+                     **/
+                    new mapboxgl.Marker(el, {
+                            offset: [0, -23]
+                        })
+                        .setLngLat(marker.geometry.coordinates)
+                        .addTo(map);
+
+                    /**
+                     * Listen to the element and when it is clicked, do three things:
+                     * 1. Fly to the point
+                     * 2. Close all other popups and display popup for clicked store
+                     * 3. Highlight listing in sidebar (and remove highlight for all other listings)
+                     **/
+                    el.addEventListener('click', (e) => {
+                        /* Fly to the point */
+                        flyToStore(marker);
+                        /* Close all other popups and display popup for clicked store */
+                        createPopUp(marker);
+                        /* Highlight listing in sidebar */
+                        const activeItem = document.getElementsByClassName('active');
+                        e.stopPropagation();
+                        if (activeItem[0]) {
+                            activeItem[0].classList.remove('active');
+                        }
+                        const listing = document.getElementById(
+                            `listing-${marker.properties.id}`
+                        );
+                        listing.classList.add('active');
+                    });
+                }
+            }
+
+            /**
+             * Add a listing for each store to the sidebar.
+             **/
+            function buildLocationList(stores) {
+                for (const store of stores.features) {
+                    /* Add a new listing section to the sidebar. */
+                    const listings = document.getElementById('listings');
+                    const listing = listings.appendChild(document.createElement('div'));
+                    /* Assign a unique `id` to the listing. */
+                    listing.id = `listing-${store.properties.id}`;
+                    /* Assign the `item` class to each listing for styling. */
+                    listing.className = 'item';
+
+                    /* Add the link to the individual listing created above. */
+                    const link = listing.appendChild(document.createElement('a'));
+                    link.href = '#';
+                    link.className = 'title';
+                    link.id = `link-${store.properties.id}`;
+                    link.innerHTML = `${store.properties.facility}`;
+
+                    /* Add details to the individual listing. */
+                    const details = listing.appendChild(document.createElement('div'));
+                    details.innerHTML = `${store.properties.phone}` + `<br>${store.properties.address}` + `, ${store.properties.city}`;
+              
+                    /**
+                     * Listen to the element and when it is clicked, do four things:
+                     * 1. Update the `currentFeature` to the store associated with the clicked link
+                     * 2. Fly to the point
+                     * 3. Close all other popups and display popup for clicked store
+                     * 4. Highlight listing in sidebar (and remove highlight for all other listings)
+                     **/
+                    link.addEventListener('click', function () {
+                        for (const feature of stores.features) {
+                            if (this.id === `link-${feature.properties.id}`) {
+                                flyToStore(feature);
+                                createPopUp(feature);
+                            }
+                        }
+                        const activeItem = document.getElementsByClassName('active');
+                        if (activeItem[0]) {
+                            activeItem[0].classList.remove('active');
+                        }
+                        this.parentNode.classList.add('active');
+                    });
+                }
+            }
+
+            /**
+             * Use Mapbox GL JS's `flyTo` to move the camera smoothly
+             * a given center point.
+             **/
+            function flyToStore(currentFeature) {
+                map.flyTo({
+                    center: currentFeature.geometry.coordinates,
+                    zoom: 15
+                });
+            }
+
+            /**
+             * Create a Mapbox GL JS `Popup`.
+             **/
+            function createPopUp(currentFeature) {
+                const popUps = document.getElementsByClassName('mapboxgl-popup');
+                if (popUps[0]) popUps[0].remove();
+                const popup = new mapboxgl.Popup({
+                        closeOnClick: false
+                    })
+                    .setLngLat(currentFeature.geometry.coordinates)
+                    .setHTML(
+                        `<h3>${currentFeature.properties.facility}</h3><h4>${currentFeature.properties.address}</h4><h4>${currentFeature.properties.phone}</h4>`
+                    )
+                    .addTo(map);
+            }
+        }
+        geojsonFetch();
     </script>
-  </body>
+</body>
+
 </html>
